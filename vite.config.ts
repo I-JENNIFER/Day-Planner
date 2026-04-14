@@ -10,7 +10,6 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
         name: 'DayFlow — Smart Daily Planner',
         short_name: 'DayFlow',
