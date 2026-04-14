@@ -66,6 +66,7 @@ import { cn } from "@/lib/utils";
 import { RoutineItem, ActivityCategory, DayOfWeek } from "./types";
 import { exportToICS } from "./utils/exportCalendar";
 import Analytics from "./Analytics";
+import SettingsPanel from "./SettingsPanel";
 
 const CATEGORY_ICONS: Record<ActivityCategory, React.ReactNode> = {
   exercise: <Dumbbell className="w-4 h-4" />,
@@ -298,19 +299,25 @@ export default function App() {
     localStorage.setItem("dayflow_routine_v2", JSON.stringify(routine));
   }, [routine]);
 
-useEffect(() => {
-  const today = format(new Date(), 'yyyy-MM-dd');
+  useEffect(() => {
+    const today = format(new Date(), "yyyy-MM-dd");
 
-  // Save today's progress as history too
-  if (completedIds.length > 0) {
-    localStorage.setItem(`dayflow_history_${today}`, JSON.stringify(completedIds));
-  }
+    // Save today's progress as history too
+    if (completedIds.length > 0) {
+      localStorage.setItem(
+        `dayflow_history_${today}`,
+        JSON.stringify(completedIds),
+      );
+    }
 
-  localStorage.setItem('dayflow_completed_v2', JSON.stringify({
-    date: today,
-    ids: completedIds
-  }));
-}, [completedIds]);
+    localStorage.setItem(
+      "dayflow_completed_v2",
+      JSON.stringify({
+        date: today,
+        ids: completedIds,
+      }),
+    );
+  }, [completedIds]);
 
   const currentDayName = format(currentTime, "eeee").toLowerCase() as DayOfWeek;
 
@@ -366,7 +373,26 @@ useEffect(() => {
   const deleteActivity = (id: string) => {
     setRoutine((prev) => prev.filter((item) => item.id !== id));
   };
+  const resetProgress = () => {
+    setCompletedIds([]);
+  };
 
+  const resetRoutine = () => {
+    setRoutine(DEFAULT_ROUTINE);
+    setCompletedIds([]);
+  };
+
+const clearHistory = () => {
+  // Only clear past days history, NOT today
+  const keysToRemove: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key?.startsWith('dayflow_history_')) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach(key => localStorage.removeItem(key));
+};
   const progress = useMemo(() => {
     if (todaysRoutine.length === 0) return 0;
     return (
@@ -396,9 +422,11 @@ useEffect(() => {
                 {format(currentTime, "HH:mm")}
               </p>
             </div>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Settings className="w-5 h-5" />
-            </Button>
+            <SettingsPanel
+              onResetProgress={resetProgress}
+              onResetRoutine={resetRoutine}
+              onClearHistory={clearHistory}
+            />
           </div>
         </div>
       </header>
@@ -773,15 +801,16 @@ useEffect(() => {
                 </ScrollArea>
               </CardContent>
             </Card>
-            </TabsContent>
-            <TabsContent value="analytics" className="space-y-6 outline-none">
+          </TabsContent>
+          <TabsContent value="analytics" className="space-y-6 outline-none">
             <div>
               <h2 className="text-2xl font-bold">Analytics</h2>
-              <p className="text-slate-500 text-sm">Your completion rate over the past 7 days.</p>
+              <p className="text-slate-500 text-sm">
+                Your completion rate over the past 7 days.
+              </p>
             </div>
             <Analytics routine={routine} />
           </TabsContent>
-          
         </Tabs>
       </main>
     </div>
