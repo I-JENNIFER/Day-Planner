@@ -10,12 +10,22 @@ import {
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 
+/** Props for the {@link SettingsPanel} component. */
 interface SettingsPanelProps {
+  /** Clears today's completion checkmarks. */
   onResetProgress: () => void;
+  /** Resets the routine to the built-in default and clears completions. */
   onResetRoutine: () => void;
+  /** Removes all historical completion data from localStorage. */
   onClearHistory: () => void;
 }
 
+/**
+ * A dialog-based settings panel accessible from the header.
+ *
+ * Provides destructive actions: reset today's progress, reset the entire
+ * routine to defaults, and clear analytics history.
+ */
 export default function SettingsPanel({ onResetProgress, onResetRoutine, onClearHistory }: SettingsPanelProps) {
   const [open, setOpen] = useState(false);
 

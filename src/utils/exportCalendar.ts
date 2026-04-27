@@ -1,5 +1,12 @@
 import { createEvents, EventAttributes } from 'ics';
 
+/**
+ * Converts a `HH:mm` time string into an ICS-compatible date-time tuple.
+ *
+ * @param dateObj - The base date to extract year/month/day from.
+ * @param timeStr - Time in `HH:mm` format.
+ * @returns A 5-element tuple `[year, month, day, hour, minute]` used by the `ics` library.
+ */
 function timeToArray(dateObj: Date, timeStr: string): [number, number, number, number, number] {
   const [hours, minutes] = timeStr.split(':').map(Number);
   return [
@@ -11,6 +18,23 @@ function timeToArray(dateObj: Date, timeStr: string): [number, number, number, n
   ];
 }
 
+/**
+ * Exports a list of activities as an `.ics` calendar file and triggers a browser download.
+ *
+ * Uses the {@link https://www.npmjs.com/package/ics | ics} library to generate
+ * iCalendar-compliant event data. The resulting file (`dayflow-schedule.ics`) can be
+ * imported into Google Calendar, Apple Calendar, Outlook, and other calendar apps.
+ *
+ * @param activities - Array of activities to export. Each must have `title`,
+ *   `startTime` (HH:mm), `endTime` (HH:mm), and `category`.
+ *
+ * @example
+ * ```ts
+ * exportToICS([
+ *   { title: 'Morning Exercise', startTime: '06:00', endTime: '07:00', category: 'exercise' }
+ * ]);
+ * ```
+ */
 export function exportToICS(activities: { title: string; startTime: string; endTime: string; category: string }[]) {
   const today = new Date();
 

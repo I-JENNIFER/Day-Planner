@@ -68,6 +68,7 @@ import { exportToICS } from "./utils/exportCalendar";
 import Analytics from "./Analytics";
 import SettingsPanel from "./SettingsPanel";
 
+/** Maps each activity category to its corresponding Lucide icon component. */
 const CATEGORY_ICONS: Record<ActivityCategory, React.ReactNode> = {
   exercise: <Dumbbell className="w-4 h-4" />,
   study: <BookOpen className="w-4 h-4" />,
@@ -79,6 +80,7 @@ const CATEGORY_ICONS: Record<ActivityCategory, React.ReactNode> = {
   other: <Coffee className="w-4 h-4" />,
 };
 
+/** Maps each activity category to its Tailwind CSS color classes (background, text, border). */
 const CATEGORY_COLORS: Record<ActivityCategory, string> = {
   exercise: "bg-orange-100 text-orange-700 border-orange-200",
   study: "bg-blue-100 text-blue-700 border-blue-200",
@@ -90,6 +92,7 @@ const CATEGORY_COLORS: Record<ActivityCategory, string> = {
   other: "bg-gray-100 text-gray-700 border-gray-200",
 };
 
+/** All days of the week, used for the planner day selector. */
 const DAYS: DayOfWeek[] = [
   "monday",
   "tuesday",
@@ -100,10 +103,17 @@ const DAYS: DayOfWeek[] = [
   "sunday",
 ];
 
+/** Default office days for the built-in routine. */
 const OFFICE_DAYS: DayOfWeek[] = ["monday", "tuesday", "thursday"];
+/** Default remote work days for the built-in routine. */
 const REMOTE_DAYS: DayOfWeek[] = ["wednesday", "friday"];
+/** Weekend days for the built-in routine. */
 const WEEKEND_DAYS: DayOfWeek[] = ["saturday", "sunday"];
 
+/**
+ * The default routine loaded on first visit or after a reset.
+ * Includes separate schedules for Office, Remote, and Weekend days.
+ */
 const DEFAULT_ROUTINE: RoutineItem[] = [
   // Office Days
   {
@@ -264,6 +274,16 @@ const DEFAULT_ROUTINE: RoutineItem[] = [
   },
 ];
 
+/**
+ * Root application component for DayFlow.
+ *
+ * Manages all top-level state including routines, completion tracking, and the
+ * currently selected planner day. State is persisted to `localStorage` using
+ * the following keys:
+ * - `dayflow_routine_v2` — the user's full routine array
+ * - `dayflow_completed_v2` — today's completion state `{ date, ids }`
+ * - `dayflow_history_<YYYY-MM-DD>` — historical daily completion IDs
+ */
 export default function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [routine, setRoutine] = useState<RoutineItem[]>(() => {
