@@ -4,10 +4,23 @@ import { format, subDays } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { RoutineItem } from './types';
 
+/** Props for the {@link Analytics} component. */
 interface AnalyticsProps {
+  /** The full routine array, used to determine how many activities were scheduled each day. */
   routine: RoutineItem[];
 }
 
+/**
+ * Displays a 7-day analytics dashboard with completion statistics and a bar chart.
+ *
+ * Reads historical completion data from `localStorage` keys matching
+ * `dayflow_history_<YYYY-MM-DD>` and today's data from `dayflow_completed_v2`.
+ *
+ * Renders:
+ * - Three summary cards: 7-day average, today's percentage, and best day
+ * - A Recharts bar chart showing daily completion rates
+ * - A daily breakdown list with progress bars
+ */
 export default function Analytics({ routine }: AnalyticsProps) {
   const weeklyData = useMemo(() => {
     return Array.from({ length: 7 }, (_, i) => {

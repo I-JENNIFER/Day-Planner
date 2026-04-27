@@ -1,0 +1,26 @@
+/**
+ * DayFlow Docusaurus theme — orange-based to match the app.
+ */
+
+:root {
+  --ifm-color-primary: #f97316;
+  --ifm-color-primary-dark: #ea6c10;
+  --ifm-color-primary-darker: #dd660f;
+  --ifm-color-primary-darkest: #b6540c;
+  --ifm-color-primary-light: #fa8333;
+  --ifm-color-primary-lighter: #fb8d42;
+  --ifm-color-primary-lightest: #fba96e;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #fb923c;
+  --ifm-color-primary-dark: #fa7e1e;
+  --ifm-color-primary-darker: #fa7410;
+  --ifm-color-primary-darkest: #d05e04;
+  --ifm-color-primary-light: #fca65a;
+  --ifm-color-primary-lighter: #fcb068;
+  --ifm-color-primary-lightest: #fdc896;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
